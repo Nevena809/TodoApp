@@ -8,20 +8,32 @@
     <title>ToDoApp</title>
   </head>
   <body>
-    <form>
-      <label>Name</label>
-      <input type="text" />
-      <label>Message</label>
-      <input type="text" />
-      <input type="checkbox" />
-    </form>
-    <form>
-      <label>Name</label>
-      <input type="text" />
-      <label>Message</label>
-      <input type="text" />
-      <input type="checkbox" />
-    </form>
+    <div class="container">
+      <div class="text_container">
+        <h1 class="todo_text">ToDo List</h1>
+      </div>
+      <div class="form_container">
+        <form class="form">
+          <input
+            class="user_name"
+            id="user_name"
+            type="text"
+            placeholder="Name of ToDo list"
+          />
+          <textarea
+            class="user_message"
+            id="user_message"
+            name="message"
+            placeholder="Write down a message"
+          ></textarea>
+          <button class="btn" id="button">Add</button>
+        </form>
+      </div>
+    </div>
+    <div class="results_container">
+      <h2 id="name_results"></h2>
+      <h2 id="message_results"></h2>
+    </div>
 
     <script src="index.js"></script>
   </body>

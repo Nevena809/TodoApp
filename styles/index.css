@@ -1,0 +1,63 @@
+body {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+}
+.user_name,
+.user_message {
+  width: 100%;
+  padding: 10px;
+  margin: 20px 0;
+  border: 2px solid purple;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.user_name:hover,
+.user_message:hover,
+.btn:hover {
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.719);
+}
+
+.btn {
+  background-color: purple;
+  border: 2px solid purple;
+  border-radius: 10px;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  margin: 20px 0;
+  width: 30%;
+}
+
+.container,
+.results_container {
+  padding: 30px;
+  border: solid 2px purple;
+  border-radius: 30px;
+  width: 800px;
+  background-color: lightgrey;
+}
+
+.todo_text {
+  border: solid 2px purple;
+  border-radius: 50px;
+}
+
+.form_container {
+  display: block;
+  justify-content: center;
+  align-items: center;
+}
+
+.text_container {
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.results_container {
+  margin-bottom: 20px;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
