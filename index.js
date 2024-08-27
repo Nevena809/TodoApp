@@ -1,4 +1,4 @@
-const userName = document.getElementById("user_name");
+const todoName = document.getElementById("todo_name");
 const userMessage = document.getElementById("user_message");
 
 // function add(e) {
@@ -9,11 +9,11 @@ const userMessage = document.getElementById("user_message");
 
 document.getElementById("button").addEventListener("click", function (e) {
   e.preventDefault();
-  let userNameText = userName.value;
+  let todoNameText = todoName.value;
   let userMessageText = userMessage.value;
 
-  document.getElementById("name_results").innerHTML += userNameText;
-  userName.value = "";
+  document.getElementById("name_results").innerHTML += todoNameText;
+  todoName.value = "";
   document.getElementById("message_results").innerHTML += userMessageText;
   userMessage.value = "";
 });
