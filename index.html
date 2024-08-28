@@ -9,30 +9,34 @@
   </head>
   <body>
     <div class="container">
-      <div class="text_container">
-        <h1 class="todo_text">ToDo List</h1>
+      <div class="text-container">
+        <h1 class="todo-text">ToDo List</h1>
       </div>
-      <div class="form_container">
+      <div class="form-container">
         <form class="form">
           <input
-            class="todo_name"
+            class="todo-name"
             id="todo_name"
             type="text"
             placeholder="Name of ToDo list"
           />
           <textarea
-            class="user_message"
+            class="user-message"
             id="user_message"
             name="message"
             placeholder="Write down a message"
           ></textarea>
-          <button class="btn" id="button">Add</button>
+          <button type="button" class="btn" id="add_button">Add</button>
         </form>
       </div>
     </div>
-    <div class="results_container">
-      <h2 id="name_results"></h2>
-      <h2 id="message_results"></h2>
+    <div class="results-container">
+      <div id="name_results">Name</div>
+      <div id="message_results">Message</div>
+    </div>
+    <div class="results-container">
+      <div id="name_results">Name</div>
+      <div id="message_results">Message</div>
     </div>
 
     <script src="index.js"></script>
