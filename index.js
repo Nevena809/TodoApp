@@ -1,19 +1,19 @@
-let todo = JSON.parse(localStorage.getItem("todo")) || [];
+let todos = JSON.parse(localStorage.getItem("todo")) || [];
 
 const todoName = document.getElementById("todo_name");
 const userMessage = document.getElementById("user_message");
-const addButton = document.getElementById("button");
+const addButton = document.getElementById("add_button");
 const nameResults = document.getElementById("name_results");
 const messageResults = document.getElementById("message_results");
 
 document.addEventListener("DOMContentLoaded", function () {
   addButton.addEventListener("click", addTaskName);
   todoName.addEventListener("keydown", function (e) {
-    if (e.key === "Entry") {
+    if (e.key === "Enter") {
       e.preventDefault();
       addTaskName();
       addTaskMessage();
-      console.log(todo);
+      console.log(todos);
     }
   });
 });
@@ -22,7 +22,7 @@ function addTaskName() {
   const newTaskName = todoName.value.trim();
   const newTaskMessage = userMessage.value.trim();
   if (newTaskName !== "" && newTaskMessage !== "") {
-    todo.push({
+    todos.push({
       name: newTaskName,
       message: newTaskMessage,
     });
@@ -45,5 +45,5 @@ function displayTasks() {
 }
 
 function saveToLocalStorage() {
-  localStorage.setItem("todo", JSON.stringify(todo));
+  localStorage.setItem("todo", JSON.stringify(todos));
 }
