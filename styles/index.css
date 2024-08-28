@@ -12,11 +12,12 @@
 }
 
 body {
+  margin: 0;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   align-items: center;
+  justify-content: center;
   background: var(--gradient);
 }
 .todo-name,
@@ -31,11 +32,13 @@ body {
 
 .todo-name:hover,
 .user-message:hover,
-.btn:hover {
+.addBtn:hover,
+.deleteBtn:hover {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.719);
 }
 
-.btn {
+.addBtn,
+.deleteBtn {
   background-color: var(--button-purple);
   border: 2px solid var(--button-purple);
   border-radius: 10px;
@@ -47,12 +50,18 @@ body {
   position: relative;
 }
 
-.container,
-.results-container {
+.btn {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.container {
   border: solid 2px var(--border);
   border-radius: 30px;
-  padding: 5rem;
-  width: 40%;
+  padding: 4rem;
+  height: 50%;
+  width: 60%;
   max-width: 30rem;
   display: flex;
   flex-direction: column;
@@ -75,10 +84,53 @@ body {
   padding-bottom: 30px;
 }
 
-.results-container {
-  margin-bottom: 20px;
-  margin-top: 20px;
-  padding: 3rem 5rem;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.disabled {
+  display: flex;
+  text-decoration: line-through;
+}
+
+.todo-container {
+  display: flex;
+  gap: 1rem;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+  overflow-y: scroll;
+}
+
+li {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding: 1.3rem;
+}
+
+input[type="checkbox"]::before {
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  text-align: center;
+}
+
+input[type="checkbox"]::after {
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  text-align: center;
+}
+
+.scroll {
+  height: 15rem;
+  scrollbar-width: thin;
+  overflow-y: auto;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll::-webkit-scrollbar {
+  width: 0.6rem;
 }

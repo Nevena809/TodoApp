@@ -1,49 +1,67 @@
-let todos = JSON.parse(localStorage.getItem("todo")) || [];
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 const todoName = document.getElementById("todo_name");
-const userMessage = document.getElementById("user_message");
 const addButton = document.getElementById("add_button");
 const nameResults = document.getElementById("name_results");
+const deleteButton = document.getElementById("delete_button");
 const messageResults = document.getElementById("message_results");
 
 document.addEventListener("DOMContentLoaded", function () {
+  displayTasks();
   addButton.addEventListener("click", addTaskName);
   todoName.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
       e.preventDefault();
       addTaskName();
-      addTaskMessage();
-      console.log(todos);
     }
   });
+  deleteButton.addEventListener("click", deleteAllTasks);
 });
 
 function addTaskName() {
   const newTaskName = todoName.value.trim();
-  const newTaskMessage = userMessage.value.trim();
-  if (newTaskName !== "" && newTaskMessage !== "") {
+  if (newTaskName !== "") {
     todos.push({
       name: newTaskName,
-      message: newTaskMessage,
+      disabled: false,
     });
     saveToLocalStorage();
     todoName.value = "";
-    userMessage.value = "";
     displayTasks();
   }
 }
 
 function displayTasks() {
-  // nameResults.innerHTML = "";
-  // todo.forEach((item, index) => {
-  //   const text = document.createElement("p");
-  //   package.innerHTML = `
-  //     <div class="todo-container">
-  //     </div>
-  //   `;
-  // });
+  nameResults.innerHTML = "";
+  todos.forEach((item, index) => {
+    const p = document.createElement("p");
+    p.innerHTML = `
+      <div class="todo-container">
+      <input type="checkbox" class="todo-checkbox" 
+      id="input_${index}" ${item.disabled ? "checked" : ""}>
+      <p id="${index}" class="${item.disabled ? "disabled" : ""} 
+      onClick="editTask(${index})"> ${item.name} </p>
+      </div>
+    `;
+    p.querySelector(".todo-checkbox").addEventListener("change", () =>
+      toogleTask(index)
+    );
+    nameResults.appendChild(p);
+  });
+}
+
+function toogleTask(index) {
+  todos[index].disabled = !todos[index].disabled;
+  saveToLocalStorage();
+  displayTasks();
 }
 
 function saveToLocalStorage() {
-  localStorage.setItem("todo", JSON.stringify(todos));
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+function deleteAllTasks() {
+  todos = [];
+  saveToLocalStorage();
+  displayTasks();
 }
