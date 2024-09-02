@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function addTaskName() {
-  const newTaskName = todoName.value.trim();
+  const newTaskName = todoName.value;
   if (newTaskName !== "") {
     todos.push({
       name: newTaskName,
@@ -46,8 +46,8 @@ function displayTasks() {
       <div class="todo-container">
         <input type="checkbox" class="todo-checkbox" 
         id="input_${index}" ${item.disabled ? "checked" : ""}>
-        <p id="todo-${index}" class="todo-p ${item.disabled ? "disabled" : ""} 
-        onClick="editTask(${index})"> ${item.name} </p>
+        <p id="todo-${index}" class="todo-p ${item.disabled ? "disabled" : ""}" 
+        onclick="editTask(${index})"> ${item.name} </p>
         <button id="${index}" class="delete-task" onclick="deleteTask(${index})">Delete</button>
       </div>
     `;
@@ -58,24 +58,40 @@ function displayTasks() {
   });
 }
 
-// function editTask(index) {
-//   const todoTask = documen.getElementById(`todo-${index}`);
-//   const exsitingText = todos[index].name;
-//   const editOldTask = document.createElement("input");
+function editTask(index) {
+  const todoTask = document.getElementById(`todo-${index}`);
+  const existingText = todos[index].name;
+  const InputTask = document.createElement("input");
 
-//   editOldTask.value = exsitingText;
-//   todoTask.replaceWith(editOldTask);
-//   editOldTask.focus();
+  InputTask.value = existingText;
+  todoTask.replaceWith(InputTask);
+  InputTask.focus();
 
-//   editOldTask.addEventListener("blur", function () {
-//     const updateText = editOldTask.value.trim();
-//     if (updateText) {
-//       todos[index].name = updateText;
-//       saveToLocalStorage();
-//     }
-//     displayTasks();
-//   });
-// }
+  //CSS
+  InputTask.style["border-radius"] = "10px";
+  InputTask.style["padding"] = "10px";
+  InputTask.style["margin"] = "15px";
+
+  InputTask.addEventListener("blur", function () {
+    const updateText = InputTask.value.trim();
+    if (updateText) {
+      todos[index].name = updateText;
+      saveToLocalStorage();
+    }
+    displayTasks();
+  });
+
+  InputTask.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      const updateText = InputTask.value.trim();
+      if (updateText) {
+        todos[index].name = updateText;
+        saveToLocalStorage();
+      }
+      displayTasks();
+    }
+  });
+}
 
 function toogleTask(index) {
   todos[index].disabled = !todos[index].disabled;
