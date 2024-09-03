@@ -33,15 +33,13 @@ body {
 .todo-name:hover,
 .user-message:hover,
 .add-btn:hover,
-.delete-all-btn:hover,
 .delete-task:hover,
 .decreasing-btn:hover,
 .increasing-btn:hover {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.719);
 }
 
-.add-btn,
-.delete-all-btn {
+.add-btn {
   background-color: var(--button-purple);
   border: 2px solid var(--button-purple);
   border-radius: 10px;

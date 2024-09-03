@@ -1,16 +1,27 @@
-let todos = JSON.parse(localStorage.getItem("todos")) || [];
+let todos = [];
+
+async function getTodos() {
+  const url = new URL(
+    `https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos?sortBy=message&order=${orderInc}`
+  );
+  // url.searchParams.append("sortBy", "message");
+
+  // url.searchParams.append("order", orderInc);
+  await fetch(url)
+    .then((response) => response.json())
+    .then((data) => (todos = data));
+}
 
 const todoName = document.getElementById("todo_name");
 const addButton = document.getElementById("add_button");
 const nameResults = document.getElementById("name_results");
-const deleteAllButton = document.getElementById("delete_all_button");
 const messageResults = document.getElementById("message_results");
 const increasingButton = document.getElementById("increasing_button");
 const decreasingButton = document.getElementById("decreasing_button");
 
 let orderInc = "asc";
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   displayTasks();
   addButton.addEventListener("click", addTaskName);
   todoName.addEventListener("keydown", function (e) {
@@ -19,36 +30,45 @@ document.addEventListener("DOMContentLoaded", function () {
       addTaskName();
     }
   });
-  deleteAllButton.addEventListener("click", deleteAllTasks);
+
   increasingButton.addEventListener("click", increasingSortTask);
   decreasingButton.addEventListener("click", decreasingSortTask);
 });
 
-function addTaskName() {
+async function addTaskName() {
   const newTaskName = todoName.value;
   if (newTaskName !== "") {
-    todos.push({
-      name: newTaskName,
-      disabled: false,
+    await fetch("https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos", {
+      headers: { "content-type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({
+        message: newTaskName,
+        done: false,
+      }),
     });
-
-    sortTasks();
+    displayTasks();
 
     todoName.value = "";
   }
 }
 
-function displayTasks() {
+async function displayTasks() {
+  await getTodos();
+
   nameResults.innerHTML = "";
   todos.forEach((item, index) => {
+    console.log(item);
+
     const p = document.createElement("p");
     p.innerHTML = `
       <div class="todo-container">
         <input type="checkbox" class="todo-checkbox" 
         id="input_${index}" ${item.disabled ? "checked" : ""}>
         <p id="todo-${index}" class="todo-p ${item.disabled ? "disabled" : ""}" 
-        onclick="editTask(${index})"> ${item.name} </p>
-        <button id="${index}" class="delete-task" onclick="deleteTask(${index})">Delete</button>
+        onclick="editTask(${index})"> ${item.message} </p>
+        <button id="${index}" class="delete-task" onclick="deleteTask(${
+      item.id
+    })">Delete</button>
       </div>
     `;
     p.querySelector(".todo-checkbox").addEventListener("change", () =>
@@ -58,7 +78,7 @@ function displayTasks() {
   });
 }
 
-function editTask(index) {
+async function editTask(index) {
   const todoTask = document.getElementById(`todo-${index}`);
   const existingText = todos[index].name;
   const InputTask = document.createElement("input");
@@ -76,7 +96,6 @@ function editTask(index) {
     const updateText = InputTask.value.trim();
     if (updateText) {
       todos[index].name = updateText;
-      saveToLocalStorage();
     }
     displayTasks();
   });
@@ -86,46 +105,38 @@ function editTask(index) {
       const updateText = InputTask.value.trim();
       if (updateText) {
         todos[index].name = updateText;
-        saveToLocalStorage();
       }
       displayTasks();
     }
   });
 }
 
-function toogleTask(index) {
+async function toogleTask(index) {
   todos[index].disabled = !todos[index].disabled;
-  saveToLocalStorage();
+
   displayTasks();
 }
 
-function saveToLocalStorage() {
-  localStorage.setItem("todos", JSON.stringify(todos));
-}
+async function deleteTask(id) {
+  await fetch(
+    "https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/" + id,
+    {
+      method: "DELETE",
+    }
+  );
 
-function deleteAllTasks() {
-  todos = [];
-  saveToLocalStorage();
   displayTasks();
 }
 
-function deleteTask(index) {
-  todos.splice(index, 1);
-  saveToLocalStorage();
-  displayTasks();
-}
-
-function increasingSortTask() {
+async function increasingSortTask() {
   orderInc = "asc";
-  todos.sort((a, b) => a.name.localeCompare(b.name));
-  saveToLocalStorage();
+
   displayTasks();
 }
 
-function decreasingSortTask() {
+async function decreasingSortTask() {
   orderInc = "desc";
-  todos.sort((a, b) => b.name.localeCompare(a.name));
-  saveToLocalStorage();
+
   displayTasks();
 }
 
