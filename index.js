@@ -22,6 +22,7 @@ const decreasingButton = document.getElementById("decreasing_button");
 let orderInc = "asc";
 
 document.addEventListener("DOMContentLoaded", async function () {
+  await getTodos();
   displayTasks();
   addButton.addEventListener("click", addTaskName);
   todoName.addEventListener("keydown", function (e) {
@@ -57,14 +58,12 @@ async function displayTasks() {
 
   nameResults.innerHTML = "";
   todos.forEach((item, index) => {
-    console.log(item);
-
     const p = document.createElement("p");
     p.innerHTML = `
       <div class="todo-container">
         <input type="checkbox" class="todo-checkbox" 
-        id="input_${index}" ${item.disabled ? "checked" : ""}>
-        <p id="todo-${index}" class="todo-p ${item.disabled ? "disabled" : ""}" 
+        id="input_${index}" ${item.done ? "checked" : ""}>
+        <p id="todo-${index}" class="todo-p ${item.done ? "disabled" : ""}" 
         onclick="editTask(${index})"> ${item.message} </p>
         <button id="${index}" class="delete-task" onclick="deleteTask(${
       item.id
@@ -74,13 +73,14 @@ async function displayTasks() {
     p.querySelector(".todo-checkbox").addEventListener("change", () =>
       toogleTask(index)
     );
+
     nameResults.appendChild(p);
   });
 }
 
-async function editTask(index) {
+function editTask(index) {
   const todoTask = document.getElementById(`todo-${index}`);
-  const existingText = todos[index].name;
+  const existingText = todos[index].message;
   const InputTask = document.createElement("input");
 
   InputTask.value = existingText;
@@ -92,19 +92,38 @@ async function editTask(index) {
   InputTask.style["padding"] = "10px";
   InputTask.style["margin"] = "15px";
 
-  InputTask.addEventListener("blur", function () {
+  InputTask.addEventListener("blur", async function () {
     const updateText = InputTask.value.trim();
     if (updateText) {
-      todos[index].name = updateText;
+      await fetch(
+        `https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/${todos[index].id}`,
+        {
+          headers: { "content-type": "application/json" },
+          method: "PUT",
+          body: JSON.stringify({
+            message: updateText,
+          }),
+        }
+      );
     }
+
     displayTasks();
   });
 
-  InputTask.addEventListener("keydown", function (event) {
+  InputTask.addEventListener("keydown", async function (event) {
     if (event.key === "Enter") {
       const updateText = InputTask.value.trim();
       if (updateText) {
-        todos[index].name = updateText;
+        await fetch(
+          `https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/${todos[index].id}`,
+          {
+            headers: { "content-type": "application/json" },
+            method: "PUT",
+            body: JSON.stringify({
+              message: updateText,
+            }),
+          }
+        );
       }
       displayTasks();
     }
@@ -112,7 +131,16 @@ async function editTask(index) {
 }
 
 async function toogleTask(index) {
-  todos[index].disabled = !todos[index].disabled;
+  todos[index].done = !todos[index].done;
+
+  await fetch(
+    `https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/${todos[index].id}`,
+    {
+      headers: { "content-type": "application/json" },
+      method: "PUT",
+      body: JSON.stringify(todos[index]),
+    }
+  );
 
   displayTasks();
 }
