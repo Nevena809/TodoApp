@@ -12,6 +12,27 @@ async function getTodos() {
     .then((data) => (todos = data));
 }
 
+async function addTodos() {
+  const newTaskName = todoName.value;
+  await fetch("https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos", {
+    headers: { "content-type": "application/json" },
+    method: "POST",
+    body: JSON.stringify({
+      message: newTaskName,
+      done: false,
+    }),
+  });
+}
+
+async function deleteTodos(id) {
+  await fetch(
+    "https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/" + id,
+    {
+      method: "DELETE",
+    }
+  );
+}
+
 const todoName = document.getElementById("todo_name");
 const addButton = document.getElementById("add_button");
 const nameResults = document.getElementById("name_results");
@@ -39,14 +60,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 async function addTaskName() {
   const newTaskName = todoName.value;
   if (newTaskName !== "") {
-    await fetch("https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos", {
-      headers: { "content-type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({
-        message: newTaskName,
-        done: false,
-      }),
-    });
+    await addTodos();
     displayTasks();
 
     todoName.value = "";
@@ -78,6 +92,19 @@ async function displayTasks() {
   });
 }
 
+async function editTodos(id, updateText) {
+  await fetch(
+    `https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/` + id,
+    {
+      headers: { "content-type": "application/json" },
+      method: "PUT",
+      body: JSON.stringify({
+        message: updateText,
+      }),
+    }
+  );
+}
+
 function editTask(index) {
   const todoTask = document.getElementById(`todo-${index}`);
   const existingText = todos[index].message;
@@ -95,16 +122,8 @@ function editTask(index) {
   InputTask.addEventListener("blur", async function () {
     const updateText = InputTask.value.trim();
     if (updateText) {
-      await fetch(
-        `https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/${todos[index].id}`,
-        {
-          headers: { "content-type": "application/json" },
-          method: "PUT",
-          body: JSON.stringify({
-            message: updateText,
-          }),
-        }
-      );
+      await editTodos(todos[index].id, updateText);
+      console.log("hello");
     }
 
     displayTasks();
@@ -114,16 +133,7 @@ function editTask(index) {
     if (event.key === "Enter") {
       const updateText = InputTask.value.trim();
       if (updateText) {
-        await fetch(
-          `https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/${todos[index].id}`,
-          {
-            headers: { "content-type": "application/json" },
-            method: "PUT",
-            body: JSON.stringify({
-              message: updateText,
-            }),
-          }
-        );
+        await editTodos(todos[index].id, updateText);
       }
       displayTasks();
     }
@@ -146,12 +156,7 @@ async function toogleTask(index) {
 }
 
 async function deleteTask(id) {
-  await fetch(
-    "https://66d556e5f5859a704265a896.mockapi.io/api/v1/todos/" + id,
-    {
-      method: "DELETE",
-    }
-  );
+  await deleteTodos(id);
 
   displayTasks();
 }
